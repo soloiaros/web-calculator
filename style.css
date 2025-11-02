@@ -1,0 +1,78 @@
+html {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 20em;
+  display: flex;
+  flex-direction: column;
+  margin-top: 3em;
+  border: 3px solid black;
+  border-radius: 2em;
+  padding: 2em;
+  gap: 1em;
+}
+
+.input-area {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+.buttons-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em
+}
+
+input {
+  flex: 4 4 0;
+  font-size: 2em;
+  width: 0;
+}
+
+#clear {
+  flex: 1 1 0;
+}
+
+.number-panel-bottom {
+  display: flex;
+}
+
+.number-panel-top {
+  display: flex;
+  justify-content: space-between;
+  width: 20em;
+}
+
+.number-buttons-area {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 3 3 auto;
+}
+
+.basic-buttons-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1 1 auto;
+}
+
+.functional.advanced {
+  height: 2em;
+}
+
+.advanced-buttons-area {
+  height: 2.5em;
+}
+
+button {
+  width: 5em;
+  height: 5em;
+  border: 1px solid red;
+}
