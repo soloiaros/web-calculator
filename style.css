@@ -27,7 +27,7 @@ body {
 .buttons-area {
   display: flex;
   flex-direction: column;
-  gap: 0.5em
+  gap: 0.4em
 }
 
 input {
@@ -54,6 +54,7 @@ input {
   display: flex;
   flex-wrap: wrap;
   flex: 3 3 auto;
+  gap: 0.4em;
 }
 
 .basic-buttons-area {
@@ -67,12 +68,13 @@ input {
   height: 2em;
 }
 
-.advanced-buttons-area {
-  height: 2.5em;
-}
-
 button {
   width: 5em;
   height: 5em;
   border: 1px solid red;
+}
+
+button#equal {
+  font-weight: 700;
+  background-color: chocolate;
 }
