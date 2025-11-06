@@ -31,11 +31,11 @@ function getTan (number) {
 }
 
 const operationRelations = {
-  'addition': add,
-  'multiplication': multiply,
-  'substraction': substract,
-  'division': divide,
-  'power': toPower,
+  '+': add,
+  '*': multiply,
+  '-': substract,
+  '/': divide,
+  '^': toPower,
   'sin': getSin,
   'cos': getCos,
   'tan': getTan,
@@ -49,22 +49,35 @@ function operate (number1, operation, number2 = undefined) {
   };
 };
 
+function checkRefreshAllowed (symbol) {
+  const inputDisplay = document.querySelector('input');
+  if (symbol === '.') {
+    return !(inputDisplay.value.includes('.'));
+  } else if (symbol in operationRelations) {
+    return inputDisplay.value
+      .split('')
+      .every(char => !(char in operationRelations))
+  }
+  return true
+}
+
 function refreshDisplay (typeOfUpdate, valueToAdd = '') {
-  const inputDisplay = document.querySelector('input')
+  const inputDisplay = document.querySelector('input');
   if (typeOfUpdate === 'addDigit') {
-    const newValue = inputDisplay.value + valueToAdd;
-    inputDisplay.value = newValue;
+    if (checkRefreshAllowed(valueToAdd)) {
+      const newValue = inputDisplay.value + valueToAdd;
+      inputDisplay.value = newValue;
+    }
   } else if (typeOfUpdate === 'result') {
     inputDisplay.value = newValue;
   } else if (typeOfUpdate === 'clear') {
     inputDisplay.value = '';
   } else {
-    new Error('Invalid typeOfUpdate, check your spelling.');
-    // I should look up how to actually throw the error
+    throw new Error('Invalid typeOfUpdate, check your spelling.');
   }
 }
 
-const numericButtons = Array.from(document.getElementsByClassName('numerical'));
+const numericButtons = Array.from(document.getElementsByClassName('add-value'));
 numericButtons.forEach(button => {
   button.addEventListener(
     'click',
@@ -75,3 +88,11 @@ numericButtons.forEach(button => {
     }
   );
 });
+
+const clearButton = document.querySelector('#clear');
+clearButton.addEventListener(
+  'click',
+  function() {
+    refreshDisplay('clear')
+  }
+)
