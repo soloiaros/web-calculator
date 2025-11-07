@@ -74,12 +74,37 @@ function refreshDisplay (valueToAdd = '', clean = false) {
   }
 }
 
-const numericButtons = Array.from(document.getElementsByClassName('add-value'));
+function getDisplayValues () {
+  const inputDisplay = document.querySelector('input');
+  const displayValue = inputDisplay.value;
+  const numbers = displayValue.split(/\s\D\s/);
+  const operator = displayValue.at(displayValue.search(/\s\D\s/) + 1);
+  return [numbers, operator]
+}
+
+const numericButtons = Array.from(document.getElementsByClassName('numerical'));
 numericButtons.forEach(button => {
   button.addEventListener(
     'click',
     function() {
       refreshDisplay(this.getAttribute('data-to-display'));
+    }
+  );
+});
+
+const basicOperationButtons = Array.from(document.getElementsByClassName('basic'));
+basicOperationButtons.forEach(button => {
+  button.addEventListener(
+    'click',
+    function() {
+      const [numbers, operator] = getDisplayValues();
+      if (numbers.length === 2 && numbers.every((n) => n !== '')) {
+        refreshDisplay(operate(numbers[0], numbers[1], operator) + this.getAttribute('data-to-display'), true);
+      } else if (numbers.length === 2 && numbers[1] === '') {
+        refreshDisplay(numbers[0] + this.getAttribute('data-to-display'), true)
+      } else if (numbers.length === 1 && numbers[0] !== '') {
+        refreshDisplay(this.getAttribute('data-to-display'));
+      }
     }
   );
 });
@@ -96,10 +121,9 @@ const evalButton = document.querySelector('#eval');
 evalButton.addEventListener(
   'click',
   function() {
-    const inputDisplay = document.querySelector('input');
-    const displayValue = inputDisplay.value;
-    const [number1, number2] = displayValue.split(/\s\D\s/);
-    const operator = displayValue.at(displayValue.search(/\s\D\s/) + 1)
-    refreshDisplay(operate(number1, number2, operator), true);
+    const [numbers, operator] = getDisplayValues();
+    if (numbers.length === 2 && numbers.every((n) => n !== '')) {
+      refreshDisplay(operate(numbers[0], numbers[1], operator), true);
+    }
   }
 )
