@@ -64,7 +64,7 @@ input {
   flex: 1 1 auto;
 }
 
-.functional.advanced {
+.number-panel-top > button {
   height: 2em;
 }
 

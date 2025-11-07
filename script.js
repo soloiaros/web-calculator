@@ -103,7 +103,7 @@ basicOperationButtons.forEach(button => {
       } else if (numbers.length === 2 && numbers[1] === '') {
         refreshDisplay(numbers[0] + this.getAttribute('data-to-display'), true)
       } else if (numbers.length === 1 && numbers[0] !== '') {
-        refreshDisplay(this.getAttribute('data-to-display'));
+        refreshDisplay(Number(numbers[0]) + this.getAttribute('data-to-display'), true);
       }
     }
   );
