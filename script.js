@@ -51,8 +51,8 @@ function operate (number1, number2, operation) {
 
 function checkRefreshAllowed (symbol) {
   const inputDisplay = document.querySelector('input');
-  if (symbol === '.') {
-    return !(inputDisplay.value.includes('.'));
+  if (symbol === '.' && getDisplayValues()[0].at(-1).includes('.')) {
+    return false;
   } else if (symbol in operationRelations) {
     number1 = Number(inputDisplay.value);
     return inputDisplay.value
