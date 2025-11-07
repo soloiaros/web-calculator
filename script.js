@@ -41,11 +41,11 @@ const operationRelations = {
   'tan': getTan,
 };
 
-function operate (number1, operation, number2 = undefined) {
+function operate (number1, number2, operation) {
   if (operation in operationRelations) {
-    return operationRelations[operation](number1, number2)
+    return operationRelations[operation](Number(number1), Number(number2))
   } else {
-    return 'error'
+    throw new Error('Unknown operator')
   };
 };
 
@@ -54,6 +54,7 @@ function checkRefreshAllowed (symbol) {
   if (symbol === '.') {
     return !(inputDisplay.value.includes('.'));
   } else if (symbol in operationRelations) {
+    number1 = Number(inputDisplay.value);
     return inputDisplay.value
       .split('')
       .every(char => !(char in operationRelations))
@@ -61,19 +62,15 @@ function checkRefreshAllowed (symbol) {
   return true
 }
 
-function refreshDisplay (typeOfUpdate, valueToAdd = '') {
+function refreshDisplay (valueToAdd = '', clean = false) {
   const inputDisplay = document.querySelector('input');
-  if (typeOfUpdate === 'addDigit') {
+  if (!clean) {
     if (checkRefreshAllowed(valueToAdd)) {
       const newValue = inputDisplay.value + valueToAdd;
       inputDisplay.value = newValue;
     }
-  } else if (typeOfUpdate === 'result') {
-    inputDisplay.value = newValue;
-  } else if (typeOfUpdate === 'clear') {
-    inputDisplay.value = '';
   } else {
-    throw new Error('Invalid typeOfUpdate, check your spelling.');
+    inputDisplay.value = valueToAdd;
   }
 }
 
@@ -82,9 +79,7 @@ numericButtons.forEach(button => {
   button.addEventListener(
     'click',
     function() {
-      refreshDisplay(
-      'addDigit',
-      this.getAttribute('data-to-display'))
+      refreshDisplay(this.getAttribute('data-to-display'));
     }
   );
 });
@@ -93,6 +88,18 @@ const clearButton = document.querySelector('#clear');
 clearButton.addEventListener(
   'click',
   function() {
-    refreshDisplay('clear')
+    refreshDisplay('', true);
+  }
+)
+
+const evalButton = document.querySelector('#eval');
+evalButton.addEventListener(
+  'click',
+  function() {
+    const inputDisplay = document.querySelector('input');
+    const displayValue = inputDisplay.value;
+    const [number1, number2] = displayValue.split(/\s\D\s/);
+    const operator = displayValue.at(displayValue.search(/\s\D\s/) + 1)
+    refreshDisplay(operate(number1, number2, operator), true);
   }
 )
