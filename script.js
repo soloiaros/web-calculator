@@ -91,15 +91,19 @@ function checkRefreshAllowed (symbol) {
   return true
 }
 
+const displayRefreshedEvent = new Event('refresh');
+
 function refreshDisplay (valueToAdd = '', clean = false) {
   const inputDisplay = document.querySelector('input');
   if (!clean) {
     if (checkRefreshAllowed(valueToAdd)) {
       const newValue = inputDisplay.value + valueToAdd;
       inputDisplay.value = String(newValue);
+      inputDisplay.dispatchEvent(displayRefreshedEvent);
     }
   } else {
     inputDisplay.value = String(valueToAdd);
+    inputDisplay.dispatchEvent(displayRefreshedEvent);
   }
 }
 
@@ -170,3 +174,17 @@ trigButtons.forEach(button => button.addEventListener(
     }
   }
 ))
+
+const inputField = document.querySelector('input');
+const scrollBar = document.querySelector('#scrollbar');
+inputField.addEventListener('refresh', () => {
+    const scrollBar = document.querySelector('#scrollbar');
+    scrollBar.style.width = `${Math.min(inputField.clientWidth / inputField.scrollWidth * 100, 100)}%`
+  }
+)
+
+inputField.addEventListener('scroll', (event) => {
+  const wholeWidth = Number(window.getComputedStyle(inputField).width.slice(0, -2));
+  const scrollBarWidth = Number(window.getComputedStyle(scrollBar).width.slice(0, -2));
+  scrollBar.style.marginLeft = `${inputField.scrollLeft / (inputField.scrollWidth - inputField.clientWidth + scrollBarWidth) * wholeWidth}px`
+})

@@ -30,10 +30,22 @@ body {
   gap: 0.4em
 }
 
-input {
+.input-and-scrollbar {
+  display: flex;
+  flex-direction: column;
   flex: 4 4 0;
-  font-size: 2em;
   width: 0;
+  gap: 0.25em;
+}
+
+input {
+  font-size: 2em;
+  flex: 12 12 0;
+}
+
+#scrollbar {
+  background-color: gray;
+  flex: 1 1 0;
 }
 
 #clear {
