@@ -33,7 +33,7 @@ body {
 .input-and-scrollbar {
   display: flex;
   flex-direction: column;
-  flex: 4 4 0;
+  flex: 4.7 4.7 0;
   width: 0;
   gap: 0.25em;
 }

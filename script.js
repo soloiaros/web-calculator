@@ -101,6 +101,12 @@ function refreshDisplay (valueToAdd = '', clean = false) {
       inputDisplay.value = String(newValue);
       inputDisplay.dispatchEvent(displayRefreshedEvent);
     }
+  } else if (valueToAdd === 'erase') {
+    const newValue = inputDisplay.value === '' ? '' 
+      : inputDisplay.value.at(-1) !== ' ' ? inputDisplay.value.slice(0, -1)
+      : inputDisplay.value.slice(0, -3);
+    inputDisplay.value = String(newValue);
+    inputDisplay.dispatchEvent(displayRefreshedEvent);
   } else {
     inputDisplay.value = String(valueToAdd);
     inputDisplay.dispatchEvent(displayRefreshedEvent);
@@ -115,6 +121,8 @@ function getDisplayValues () {
   return [numbers, operator]
 }
 
+const keyToButtonRelations = {};
+
 const numericButtons = Array.from(document.getElementsByClassName('numerical'));
 numericButtons.forEach(button => {
   button.addEventListener(
@@ -123,6 +131,8 @@ numericButtons.forEach(button => {
       refreshDisplay(this.getAttribute('data-to-display'));
     }
   );
+  
+  keyToButtonRelations[button.getAttribute('data-to-display')] = button;
 });
 
 const basicOperationButtons = Array.from(document.getElementsByClassName('basic'));
@@ -134,12 +144,15 @@ basicOperationButtons.forEach(button => {
       if (numbers.length === 2 && numbers.every((n) => n !== '')) {
         refreshDisplay(operate(numbers[0], operator, numbers[1]) + this.getAttribute('data-to-display'), true);
       } else if (numbers.length === 2 && numbers[1] === '') {
-        refreshDisplay(numbers[0] + this.getAttribute('data-to-display'), true)
+        refreshDisplay(`${numbers[0]} ${this.getAttribute('data-to-display')} `, true)
       } else if (numbers.length === 1 && numbers[0] !== '') {
-        refreshDisplay(Number(numbers[0]) + this.getAttribute('data-to-display'), true);
+        refreshDisplay(`${Number(numbers[0])} ${this.getAttribute('data-to-display')} `, true);
       }
     }
   );
+
+  keyToButtonRelations[button.getAttribute('data-to-display')] = button;
+
 });
 
 const clearButton = document.querySelector('#clear');
@@ -149,6 +162,7 @@ clearButton.addEventListener(
     refreshDisplay('', true);
   }
 )
+keyToButtonRelations['c'] = clearButton;
 
 const evalButton = document.querySelector('#eval');
 evalButton.addEventListener(
@@ -160,6 +174,8 @@ evalButton.addEventListener(
     }
   }
 )
+keyToButtonRelations['='] = evalButton;
+keyToButtonRelations['Enter'] = evalButton;
 
 const trigButtons = Array.from(document.getElementsByClassName('advanced'));
 trigButtons.forEach(button => button.addEventListener(
@@ -187,4 +203,12 @@ inputField.addEventListener('scroll', (event) => {
   const wholeWidth = Number(window.getComputedStyle(inputField).width.slice(0, -2));
   const scrollBarWidth = Number(window.getComputedStyle(scrollBar).width.slice(0, -2));
   scrollBar.style.marginLeft = `${inputField.scrollLeft / (inputField.scrollWidth - inputField.clientWidth + scrollBarWidth) * wholeWidth}px`
+})
+
+document.addEventListener('keyup', (event) => {
+  if (event.key in keyToButtonRelations) {
+    keyToButtonRelations[event.key].click();
+  } else if (event.key === 'Backspace') {
+    refreshDisplay('erase', true);
+  }
 })
