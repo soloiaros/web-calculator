@@ -83,7 +83,8 @@ input {
 button {
   width: 5em;
   height: 5em;
-  border: 1px solid red;
+  border: 1px solid grey;
+  border-radius: 0.33em;
 }
 
 button#eval {
